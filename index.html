@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+
 <body>
     <div class="search-container">
         <input type="text" id="search-input" placeholder="Search">
@@ -19,7 +21,14 @@
     <div class="image-grid">
         <!-- Images will be populated here -->
     </div>
+    <div class="lightbox" style="display:none;">
+        <img src="" alt="Lightbox Image">
+        <a href="#" class="close-lightbox"
+            style="color: white; position: absolute; top: 10px; right: 20px; font-size: 24px;">Close</a>
+    </div>
+
     <script src="app.js"></script>
 
 </body>
+
 </html>

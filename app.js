@@ -1,11 +1,11 @@
-const apiKey = 'upbc8Esy7mP3seS1ZxmOyUpP3mtxP55CyJYBHr8iqyk'; 
+const apiKey = 'upbc8Esy7mP3seS1ZxmOyUpP3mtxP55CyJYBHr8iqyk';
 const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=10`;
 const searchApiUrl = `https://api.unsplash.com/search/photos?client_id=${apiKey}`;
 
 document.getElementById('search-button').addEventListener('click', () => {
     const query = document.getElementById('search-input').value;
     if (query) {
-        loadImages(query, true); 
+        loadImages(query, true);
     }
 });
 
@@ -34,44 +34,43 @@ function loadImages(query, isSearch = false) {
 function displayImages(images) {
     const imageGrid = document.querySelector('.image-grid');
     imageGrid.innerHTML = ''; // Clear existing images
-    images.forEach((img, index) => {
+
+    images.forEach((img) => {
         const link = document.createElement('a');
-        link.href = `#lightbox-${index}`;
         link.className = 'lightbox-trigger';
 
         const imgElement = document.createElement('img');
         imgElement.src = img.urls.small;
-        if (index >= 3) {
-            imgElement.loading = "lazy";
-        }
+        imgElement.dataset.highres = img.urls.regular; // Store high-res URL in data attribute
+        imgElement.alt = 'Thumbnail'; // Adding alt for accessibility
 
         link.appendChild(imgElement);
         imageGrid.appendChild(link);
 
-        // Create the lightbox container
-        const lightbox = document.createElement('div');
-        lightbox.id = `lightbox-${index}`;
-        lightbox.className = 'lightbox';
-        
-        const lightboxImage = document.createElement('img');
-        lightboxImage.src = img.urls.regular; // Use a higher resolution image for the lightbox
-        
-        const closeButton = document.createElement('a');
-        closeButton.href = '#';
-        closeButton.textContent = 'Close';
-        closeButton.style.color = 'white';
-        closeButton.style.position = 'absolute';
-        closeButton.style.top = '10px';
-        closeButton.style.right = '20px';
-        closeButton.style.fontSize = '24px';
-        
-        lightbox.appendChild(lightboxImage);
-        lightbox.appendChild(closeButton);
-        document.body.appendChild(lightbox);
+        // Add event listener to each link for opening the lightbox
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the browser from following the href
+            const highResUrl = imgElement.dataset.highres;
+            const lightboxImage = document.querySelector('.lightbox img');
+            lightboxImage.src = highResUrl;
+            lightbox.style.display = 'flex'; // Show the lightbox
+        });
     });
 }
+// Assume a single lightbox element exists in the HTML:
+// <div class="lightbox" style="display:none;">
+//   <img src="" alt="Lightbox Image">
+//   <a href="#" class="close-lightbox" style="color: white; position: absolute; top: 10px; right: 20px; font-size: 24px;">Close</a>
+// </div>
 
+const lightbox = document.querySelector('.lightbox');
+const closeBtn = document.querySelector('.close-lightbox');
+
+closeBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    lightbox.style.display = 'none'; // Hide the lightbox
+});
 
 window.onload = () => {
-    loadImages(); 
+    loadImages(); // Load initial images
 };
