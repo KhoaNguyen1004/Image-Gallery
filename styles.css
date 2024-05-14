@@ -1,0 +1,42 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.search-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.search-container input{
+    border-radius: 8px;
+}
+
+.search-container button{
+    border-radius: 8px;
+}
+
+.tag-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.tag-container button {
+    margin: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 20px;
+}
+
+.image-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
