@@ -35,14 +35,42 @@ function displayImages(images) {
     const imageGrid = document.querySelector('.image-grid');
     imageGrid.innerHTML = ''; // Clear existing images
     images.forEach((img, index) => {
+        const link = document.createElement('a');
+        link.href = `#lightbox-${index}`;
+        link.className = 'lightbox-trigger';
+
         const imgElement = document.createElement('img');
         imgElement.src = img.urls.small;
         if (index >= 3) {
-            imgElement.loading = "lazy";  // Lazy load for images starting from the 4th
+            imgElement.loading = "lazy";
         }
-        imageGrid.appendChild(imgElement);
+
+        link.appendChild(imgElement);
+        imageGrid.appendChild(link);
+
+        // Create the lightbox container
+        const lightbox = document.createElement('div');
+        lightbox.id = `lightbox-${index}`;
+        lightbox.className = 'lightbox';
+        
+        const lightboxImage = document.createElement('img');
+        lightboxImage.src = img.urls.regular; // Use a higher resolution image for the lightbox
+        
+        const closeButton = document.createElement('a');
+        closeButton.href = '#';
+        closeButton.textContent = 'Close';
+        closeButton.style.color = 'white';
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '10px';
+        closeButton.style.right = '20px';
+        closeButton.style.fontSize = '24px';
+        
+        lightbox.appendChild(lightboxImage);
+        lightbox.appendChild(closeButton);
+        document.body.appendChild(lightbox);
     });
 }
+
 
 window.onload = () => {
     loadImages(); 
