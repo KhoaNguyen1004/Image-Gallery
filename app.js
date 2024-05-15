@@ -21,11 +21,14 @@ tags.forEach(tag => {
     tagContainer.appendChild(button);
 });
 
+const likedImages = new Set(JSON.parse(localStorage.getItem('likedImages') || '[]'));
+
 function loadImages(query, isSearch = false) {
     const url = isSearch ? `${searchApiUrl}&query=${query}&per_page=10` : apiUrl;
     axios.get(url)
         .then(response => {
-            const images = isSearch ? response.data.results : response.data; // Axios automatically accesses `.data`
+            const images = isSearch ? response.data.results : response.data;
+            images.sort((a, b) => likedImages.has(b.id) - likedImages.has(a.id));
             displayImages(images);
         })
         .catch(error => console.error('Error fetching images:', error));
@@ -33,42 +36,66 @@ function loadImages(query, isSearch = false) {
 
 function displayImages(images) {
     const imageGrid = document.querySelector('.image-grid');
-    imageGrid.innerHTML = ''; // Clear existing images
+    imageGrid.innerHTML = '';
 
     images.forEach((img) => {
+        const imageContainer = document.createElement('figure');
+        imageContainer.className = 'image-container';
+
         const link = document.createElement('a');
         link.className = 'lightbox-trigger';
 
         const imgElement = document.createElement('img');
         imgElement.src = img.urls.small;
-        imgElement.dataset.highres = img.urls.regular; // Store high-res URL in data attribute
-        imgElement.alt = 'Thumbnail'; // Adding alt for accessibility
+        imgElement.dataset.highres = img.urls.regular;
+        imgElement.alt = img.description || 'Thumbnail';
+        imgElement.dataset.imageId = img.id;
 
         link.appendChild(imgElement);
-        imageGrid.appendChild(link);
+        imageContainer.appendChild(link);
+        imageGrid.appendChild(imageContainer);
 
-        // Add event listener to each link for opening the lightbox
         link.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent the browser from following the href
+            event.preventDefault();
             const highResUrl = imgElement.dataset.highres;
             const lightboxImage = document.querySelector('.lightbox img');
             lightboxImage.src = highResUrl;
-            lightbox.style.display = 'flex'; // Show the lightbox
+            lightboxImage.dataset.imageId = imgElement.dataset.imageId;
+            if (likedImages.has(imgElement.dataset.imageId)) {
+                lightboxImage.classList.add('liked');
+            } else {
+                lightboxImage.classList.remove('liked');
+            }
+            document.querySelector('.lightbox').style.display = 'flex';
         });
     });
 }
-// Assume a single lightbox element exists in the HTML:
-// <div class="lightbox" style="display:none;">
-//   <img src="" alt="Lightbox Image">
-//   <a href="#" class="close-lightbox" style="color: white; position: absolute; top: 10px; right: 20px; font-size: 24px;">Close</a>
-// </div>
+
+function toggleLike(imageId) {
+    if (likedImages.has(imageId)) {
+        likedImages.delete(imageId);
+    } else {
+        likedImages.add(imageId);
+    }
+    localStorage.setItem('likedImages', JSON.stringify([...likedImages]));
+}
 
 const lightbox = document.querySelector('.lightbox');
-const closeBtn = document.querySelector('.close-lightbox');
+const lightboxImage = document.querySelector('.lightbox img');
+lightboxImage.addEventListener('dblclick', () => {
+    const imageId = lightboxImage.dataset.imageId;
+    toggleLike(imageId);
+    if (likedImages.has(imageId)) {
+        lightboxImage.classList.add('liked');
+    } else {
+        lightboxImage.classList.remove('liked');
+    }
+});
 
+const closeBtn = document.querySelector('.close-lightbox');
 closeBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    lightbox.style.display = 'none'; // Hide the lightbox
+    lightbox.style.display = 'none';
 });
 
 window.onload = () => {
