@@ -46,7 +46,7 @@ function displayImages(images) {
         link.className = 'lightbox-trigger';
 
         const imgElement = document.createElement('img');
-        imgElement.src = img.urls.small;
+        imgElement.dataset.src = img.urls.small;  // Use data-src for lazy loading
         imgElement.dataset.highres = img.urls.regular;
         imgElement.alt = img.description || 'Thumbnail';
         imgElement.dataset.imageId = img.id;
@@ -54,20 +54,27 @@ function displayImages(images) {
         link.appendChild(imgElement);
         imageContainer.appendChild(link);
         imageGrid.appendChild(imageContainer);
+    });
 
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const highResUrl = imgElement.dataset.highres;
-            const lightboxImage = document.querySelector('.lightbox img');
-            lightboxImage.src = highResUrl;
-            lightboxImage.dataset.imageId = imgElement.dataset.imageId;
-            if (likedImages.has(imgElement.dataset.imageId)) {
-                lightboxImage.classList.add('liked');
-            } else {
-                lightboxImage.classList.remove('liked');
+    lazyLoadImages();
+}
+
+function lazyLoadImages() {
+    const imgObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;  // Assign the actual source to img.src
+                observer.unobserve(img);  // Stop observing the image once it has loaded
             }
-            document.querySelector('.lightbox').style.display = 'flex';
         });
+    }, {
+        rootMargin: "0px",
+        threshold: 0.01
+    });
+
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imgObserver.observe(img);
     });
 }
 
