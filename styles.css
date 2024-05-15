@@ -76,20 +76,4 @@ body, html {
     display: flex;
 }
 
-.heart-icon {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    height: 25px;
-    width: 25px;
-    background-image: url('path_to_heart_icon_image');
-    background-size: cover;
-    cursor: pointer;
-    display: none; /* Hide by default */
-}
-
-.image-container:hover .heart-icon {
-    display: block; /* Show the heart icon on hover */
-}
-
 
