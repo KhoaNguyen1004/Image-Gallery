@@ -1,36 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAP Intern - Image Gallery</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAP Intern - Image Gallery</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search">
-        <button id="search-button">SEARCH</button>
+        <input type="text" id="searchInput" placeholder="Search for images...">
+        <button id="searchButton">SEARCH</button>
     </div>
-    <div class="tag-container">
-        <h3>Hot search:</h3>
-        <!-- Tags will be populated here -->
+    <br>
+    <div class="hot-search">
+        <button onclick="searchImages('dog')">dog</button>
+        <button onclick="searchImages('cat')">cat</button>
+        <button onclick="searchImages('bird')">bird</button>
+        <button onclick="searchImages('fish')">fish</button>
+        <button onclick="searchImages('universe')">universe</button>
+        <button onclick="searchImages('puss in boots')">puss in boots</button>
+        <button onclick="searchImages('Iphone')">Iphone</button>
+        <button onclick="searchImages('Android')">Android</button>
+        <button onclick="searchImages('religion')">religion</button>
+        <button onclick="searchImages('Viet Nam')">Viet Nam</button>
+        <!-- Add more buttons for other hot searches -->
     </div>
-    <div class="image-grid">
-        <!-- Images will be populated here dynamically, using the structure below as a template:
-        <figure class="image-container">
-            <a href="#" class="lightbox-trigger">
-                <img src="" alt="Thumbnail">
-            </a>
-            <div class="heart-icon" aria-label="like button" role="button" tabindex="0"></div>
-        </figure>
-        -->
+    <div id="imageGallery" class="image-gallery">
+        <!-- Images will be loaded here -->
     </div>
-    <div class="lightbox" style="display:none;">
-        <img src="" alt="Lightbox Image">
-        <a href="#" class="close-lightbox" style="color: white; position: absolute; top: 10px; right: 20px; font-size: 24px;">Close</a>
-    </div>
-
-    <script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
