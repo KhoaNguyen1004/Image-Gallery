@@ -32,3 +32,16 @@ body {
     cursor: pointer;
     opacity: 80%;
 }
+
+@media (max-width: 768px) {
+    .image-gallery {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .image-gallery {
+        grid-template-columns: 1fr; /* One column on very small screens */
+    }
+}
+
